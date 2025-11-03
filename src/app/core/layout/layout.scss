@@ -1,0 +1,37 @@
+mat-drawer {
+  width: 250px;
+}
+
+.container {
+  height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.scrollable {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: 24px;
+}
+
+.footer {
+  height: auto;
+  min-height: 48px;
+}
+
+.footer-text {
+  font-size: 14px;
+}
