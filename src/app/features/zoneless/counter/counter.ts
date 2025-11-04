@@ -22,6 +22,17 @@ import { MatChipsModule } from '@angular/material/chips';
 })
 export class Counter {
   count = signal(0);
+  
+  // Compteur pour voir combien de fois le template est VRAIMENT évalué
+  private templateEvalCount = 0;
+  
+  // Cette fonction sera appelée depuis le template pour prouver son exécution
+  trackTemplateEval(): string {
+    this.templateEvalCount++;
+    const msg = `🔵 Counter template eval #${this.templateEvalCount}`;
+    console.log(msg);
+    return msg;
+  }
 
   increment() {
     this.count.update(value => value + 1);

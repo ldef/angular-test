@@ -28,6 +28,17 @@ import { ListItem } from './item/list-item.model';
 export class List implements OnInit {
   // Signal contenant les 100 éléments
   items = signal<ListItem[]>([]);
+  
+  // Compteur pour voir combien de fois le template est VRAIMENT évalué
+  private templateEvalCount = 0;
+  
+  // Cette fonction sera appelée depuis le template pour prouver son exécution
+  trackTemplateEval(): string {
+    this.templateEvalCount++;
+    const msg = `🟢 List template eval #${this.templateEvalCount}`;
+    console.log(msg);
+    return msg;
+  }
 
   ngOnInit() {
     this.generateItems();

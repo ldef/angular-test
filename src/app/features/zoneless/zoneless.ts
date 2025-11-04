@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Counter } from "./counter/counter";
 import { List } from "./list/list";
+import { StressTest } from "./stress-test/stress-test";
 
 @Component({
   selector: 'app-zoneless',
@@ -13,10 +14,12 @@ import { List } from "./list/list";
     MatCardModule,
     MatIconModule,
     Counter, 
-    List
+    List,
+    StressTest
   ],
   templateUrl: './zoneless.html',
-  styleUrl: './zoneless.scss'
+  styleUrl: './zoneless.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ZonelessComponent {
 

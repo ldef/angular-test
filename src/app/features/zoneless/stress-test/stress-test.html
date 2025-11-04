@@ -1,0 +1,140 @@
+<mat-card class="stress-test-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>speed</mat-icon>
+      Performance Stress Test
+    </mat-card-title>
+    <mat-card-subtitle>Rendering: {{ trackTemplateEval() }} times</mat-card-subtitle>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <!-- Test 1: Async Operations sans signal -->
+    <div class="test-section">
+      <h3>Test 1: 1000 Async Operations (no UI updates)</h3>
+      <p class="explanation">
+        Avec <strong>Zone.js</strong>: 1000 détections déclenchées ❌<br>
+        Avec <strong>Zoneless</strong>: 0 détection (sauf début/fin) ✅
+      </p>
+      
+      <div class="metrics">
+        <mat-chip-set>
+          <mat-chip>
+            <mat-icon>timer</mat-icon>
+            {{ elapsedTime() }}ms
+          </mat-chip>
+          <mat-chip>
+            <mat-icon>cached</mat-icon>
+            {{ detectionCycles() }} cycles
+          </mat-chip>
+          <mat-chip [highlighted]="asyncOpsCount() === 1000">
+            <mat-icon>check_circle</mat-icon>
+            {{ asyncOpsCount() }}/1000 ops
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+      
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="startStressTest()"
+        [disabled]="isRunning()">
+        <mat-icon>play_arrow</mat-icon>
+        Run Async Test
+      </button>
+    </div>
+
+    <!-- Test 2: Signal Updates rapides -->
+    <div class="test-section">
+      <h3>Test 2: 1000 Signal Updates</h3>
+      <p class="explanation">
+        Montre l'efficacité du <strong>batching</strong> en Zoneless<br>
+        Les updates sont regroupées intelligemment
+      </p>
+      
+      <div class="metrics">
+        <mat-chip-set>
+          <mat-chip>
+            <mat-icon>timer</mat-icon>
+            {{ elapsedTime() }}ms
+          </mat-chip>
+          <mat-chip>
+            <mat-icon>cached</mat-icon>
+            {{ detectionCycles() }} cycles
+          </mat-chip>
+          <mat-chip [highlighted]="asyncOpsCount() === 1000">
+            <mat-icon>update</mat-icon>
+            {{ asyncOpsCount() }}/1000 updates
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+      
+      <button 
+        mat-raised-button 
+        color="accent" 
+        (click)="startSignalStressTest()"
+        [disabled]="isRunning()">
+        <mat-icon>play_arrow</mat-icon>
+        Run Signal Test
+      </button>
+    </div>
+
+
+    <!-- Test 3: Polling continu -->
+    <div class="test-section">
+      <h3>Test 3: Continuous Polling (20/sec)</h3>
+      <p class="explanation">
+        Simule un flux de données en temps réel<br>
+        Avec <strong>Zoneless + OnPush</strong>: Seul ce composant se met à jour ✅
+      </p>
+      
+      <div class="metrics">
+        <mat-chip-set>
+          <mat-chip [highlighted]="isPolling()">
+            <mat-icon>{{ isPolling() ? 'fiber_manual_record' : 'stop_circle' }}</mat-icon>
+            {{ isPolling() ? 'Polling...' : 'Stopped' }}
+          </mat-chip>
+          <mat-chip>
+            <mat-icon>cached</mat-icon>
+            {{ detectionCycles() }} cycles
+          </mat-chip>
+          <mat-chip [highlighted]="pollingCount() >= 100">
+            <mat-icon>update</mat-icon>
+            {{ pollingCount() }}/100 ticks
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+      
+      <mat-progress-bar 
+        mode="determinate" 
+        [value]="pollingCount()"
+        [color]="isPolling() ? 'accent' : 'primary'">
+      </mat-progress-bar>
+      
+      <div class="button-group">
+        <button 
+          mat-raised-button 
+          color="accent" 
+          (click)="startPolling()"
+          [disabled]="isPolling()">
+          <mat-icon>play_arrow</mat-icon>
+          Start Polling
+        </button>
+        
+        <button 
+          mat-stroked-button 
+          (click)="stopPolling()"
+          [disabled]="!isPolling()">
+          <mat-icon>stop</mat-icon>
+          Stop
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+  
+  <mat-card-actions>
+    <button mat-button (click)="reset()">
+      <mat-icon>refresh</mat-icon>
+      Reset All
+    </button>
+  </mat-card-actions>
+</mat-card>
