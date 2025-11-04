@@ -1,0 +1,17 @@
+<mat-list-item class="item-material" matRipple>
+  <mat-icon matListItemIcon [style.color]="getIconColor()">
+    {{ getIcon() }}
+  </mat-icon>
+  
+  <div matListItemTitle class="item-title">
+    {{ item().name }}
+  </div>
+  
+  <div matListItemLine class="item-subtitle">
+    ID: #{{ item().id }} • Item {{ item().id }} of the list
+  </div>
+  
+  <button mat-icon-button matListItemMeta color="primary">
+    <mat-icon>arrow_forward_ios</mat-icon>
+  </button>
+</mat-list-item>
