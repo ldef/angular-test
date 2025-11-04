@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +18,7 @@ import { MatChipsModule } from '@angular/material/chips';
   ],
   templateUrl: './counter.html',
   styleUrl: './counter.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Counter {
   count = signal(0);

@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,6 +23,7 @@ import { ListItem } from './item/list-item.model';
   ],
   templateUrl: './list.html',
   styleUrl: './list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class List implements OnInit {
   // Signal contenant les 100 éléments

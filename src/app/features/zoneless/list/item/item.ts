@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, DoCheck, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,20 +17,14 @@ import { ListItem } from './list-item.model';
   ],
   templateUrl: './item.html',
   styleUrl: './item.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Item {
+export class Item implements DoCheck {
   // Signal d'entrée pour recevoir les données de l'élément
   item = input.required<ListItem>();
-  
-  // Méthode pour obtenir une icône basée sur l'ID
-  getIcon(): string {
-    const icons = ['code', 'web', 'phone_android', 'laptop', 'storage', 'cloud', 'build', 'palette'];
-    return icons[this.item().id % icons.length];
-  }
-  
-  // Méthode pour obtenir une couleur basée sur l'ID
-  getIconColor(): string {
-    const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22', '#34495e'];
-    return colors[this.item().id % colors.length];
+
+  ngDoCheck() {
+    // Logique de détection des changements
+    console.log(`Item checked: ${this.item().name}`);
   }
 }
