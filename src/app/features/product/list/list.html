@@ -1,8 +1,8 @@
 <div class="product-list-container">
   <h2>Liste des produits</h2>
   
-  @if (products$ | async; as products) {
-    <table mat-table [dataSource]="products" class="mat-elevation-z8">
+  @if (productsData$ | async; as data) {
+    <table mat-table [dataSource]="data.items" class="mat-elevation-z8">
       
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -31,6 +31,15 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    
+    <mat-paginator 
+      [length]="data.total"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)"
+      showFirstLastButtons>
+    </mat-paginator>
   } @else {
     <div class="loading-container">
       <mat-spinner></mat-spinner>
