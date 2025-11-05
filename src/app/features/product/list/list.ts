@@ -13,7 +13,9 @@ import { combineLatest, switchMap } from 'rxjs';
   styleUrl: './list.scss',
 })
 export class List {
-  productService = inject(ProductService);
+  readonly displayedColumns: string[] = ['id', 'name', 'description', 'price'];
+  readonly pageSizeOptions = [5, 10, 25, 50];
+  readonly productService = inject(ProductService);
 
   pageIndex = signal(0);
   pageSize = signal(10);
@@ -22,13 +24,8 @@ export class List {
     toObservable(this.pageIndex),
     toObservable(this.pageSize)
   ]).pipe(
-    switchMap(([pageIndex, pageSize]) => 
-      this.productService.getProducts(pageIndex, pageSize)
-    )
+    switchMap(([pageIndex, pageSize]) => this.productService.getProducts(pageIndex, pageSize))
   );
-  
-  displayedColumns: string[] = ['id', 'name', 'description', 'price'];
-  pageSizeOptions = [5, 10, 25, 50];
 
   onPageChange(event: PageEvent): void {
     if (event.pageSize !== this.pageSize()) {
