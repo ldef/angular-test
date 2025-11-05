@@ -1,41 +1,41 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProductService } from '../product';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { combineLatest, switchMap } from 'rxjs';
+
+import { Product } from '../model/product';
+import { Paginated } from '../../../mock/paginated';
 
 @Component({
   imports: [CommonModule, MatTableModule, MatProgressSpinnerModule, MatPaginatorModule],
   templateUrl: './list.html',
   styleUrl: './list.scss',
 })
-export class List {
-  productService = inject(ProductService);
+export class List implements OnInit {
+  readonly displayedColumns: string[] = ['id', 'name', 'description', 'price'];
+  readonly pageSizeOptions = [5, 10, 25, 50];
 
-  pageIndex = signal(0);
-  pageSize = signal(10);
+  readonly productService = inject(ProductService);
 
-  productsData$ = combineLatest([
-    toObservable(this.pageIndex),
-    toObservable(this.pageSize)
-  ]).pipe(
-    switchMap(([pageIndex, pageSize]) => 
-      this.productService.getProducts(pageIndex, pageSize)
-    )
-  );
-  
-  displayedColumns: string[] = ['id', 'name', 'description', 'price'];
-  pageSizeOptions = [5, 10, 25, 50];
+  pageIndex = 0;
+  pageSize = 10;
+  products: Paginated<Product> = { items: [], total: 0 };
+
+  ngOnInit() {
+    this.getProducts();
+  }
+
+  getProducts() {
+    this.productService.getProducts(this.pageIndex, this.pageSize).subscribe(products => {
+      this.products = products;
+    });
+  }
 
   onPageChange(event: PageEvent): void {
-    if (event.pageSize !== this.pageSize()) {
-      this.pageIndex.set(0);
-    } else {
-      this.pageIndex.set(event.pageIndex);
-    }
-    this.pageSize.set(event.pageSize);
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getProducts();
   }
 }
