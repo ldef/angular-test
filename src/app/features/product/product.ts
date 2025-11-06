@@ -1,6 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { httpResource } from '@angular/common/http';
+import { Injectable, Signal } from '@angular/core';
 
 import { Product } from './model/product';
 import { Paginated } from '../../mock/paginated';
@@ -10,13 +9,13 @@ import { Paginated } from '../../mock/paginated';
 })
 export class ProductService {
 
-  http = inject(HttpClient);
-
-  getProducts(page: number = 0, pageSize: number = 10): Observable<Paginated<Product>> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString());
-
-    return this.http.get<Paginated<Product>>('/api/products', { params});
+  getProducts(pageIndex: Signal<number>, pageSize: Signal<number>) {
+    return httpResource<Paginated<Product>>(() => ({
+      url: '/api/products',
+      params: {
+        page: pageIndex().toString(),
+        pageSize: pageSize().toString()
+      }
+    }));
   }
 }

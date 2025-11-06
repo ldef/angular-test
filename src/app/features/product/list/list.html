@@ -1,8 +1,8 @@
 <div class="product-list-container">
   <h2>Products list</h2>
   
-  @if (productsData$ | async; as data) {
-    <table mat-table [dataSource]="data.items" class="mat-elevation-z8">
+  @if (productsData.hasValue()) {
+    <table mat-table [dataSource]="productsData.value().items" class="mat-elevation-z8">
       
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -33,7 +33,7 @@
     </table>
     
     <mat-paginator 
-      [length]="data.total"
+      [length]="productsData.value().total"
       [pageSize]="pageSize()"
       [pageIndex]="pageIndex()"
       [pageSizeOptions]="pageSizeOptions"
