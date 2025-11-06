@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ProductService } from '../product';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -11,16 +11,17 @@ import { combineLatest, switchMap } from 'rxjs';
   imports: [CommonModule, MatTableModule, MatProgressSpinnerModule, MatPaginatorModule],
   templateUrl: './list.html',
   styleUrl: './list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class List {
   readonly displayedColumns: string[] = ['id', 'name', 'description', 'price'];
   readonly pageSizeOptions = [5, 10, 25, 50];
   readonly productService = inject(ProductService);
 
-  pageIndex = signal(0);
-  pageSize = signal(10);
+  readonly pageIndex = signal(0);
+  readonly pageSize = signal(10);
 
-  productsData$ = combineLatest([
+  readonly productsData$ = combineLatest([
     toObservable(this.pageIndex),
     toObservable(this.pageSize)
   ]).pipe(
